@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace WyriHaximus\React\Mutex;
 
-final class Lock implements LockInterface
+use WyriHaximus\React\Mutex\Contracts\LockInterface;
+
+final class LockStub implements LockInterface
 {
     private string $key;
 

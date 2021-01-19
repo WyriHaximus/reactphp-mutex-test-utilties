@@ -7,7 +7,6 @@
     <arg value="np" /> <!-- n = ignore warnings, p = show progress -->
 
     <file>../../src</file>
-    <file>../../tests</file>
 
     <rule ref="WyriHaximus-OSS" />
 </ruleset>

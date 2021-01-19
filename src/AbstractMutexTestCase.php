@@ -8,6 +8,8 @@ use React\EventLoop\Factory;
 use React\EventLoop\LoopInterface;
 use React\Promise\PromiseInterface;
 use WyriHaximus\AsyncTestUtilities\AsyncTestCase;
+use WyriHaximus\React\Mutex\Contracts\LockInterface;
+use WyriHaximus\React\Mutex\Contracts\MutexInterface;
 
 use function bin2hex;
 use function random_bytes;
@@ -38,20 +40,20 @@ abstract class AbstractMutexTestCase extends AsyncTestCase
         $secondLock        = '';
         $firstMutexPromise = $mutex->acquire($key, TWO_FLOAT);
         /** @phpstan-ignore-next-line */
-        $firstMutexPromise->then(static function (?Lock $lock) use (&$firstLock): void {
+        $firstMutexPromise->then(static function (?LockInterface $lock) use (&$firstLock): void {
             $firstLock = $lock;
         });
         $secondtMutexPromise = timedPromise($loop, ONE)->then(
             static fn (): PromiseInterface => $mutex->acquire($key, TWO_FLOAT)
         );
         /** @phpstan-ignore-next-line */
-        $secondtMutexPromise->then(static function (?Lock $lock) use (&$secondLock): void {
+        $secondtMutexPromise->then(static function (?LockInterface $lock) use (&$secondLock): void {
             $secondLock = $lock;
         });
 
         $this->await(all([$firstMutexPromise, $secondtMutexPromise]), $loop);
 
-        self::assertInstanceOf(Lock::class, $firstLock);
+        self::assertInstanceOf(LockInterface::class, $firstLock);
         self::assertNull($secondLock);
     }
 
@@ -65,7 +67,7 @@ abstract class AbstractMutexTestCase extends AsyncTestCase
         $loop  = Factory::create();
         $mutex = $this->provideMutex($loop);
 
-        $fakeLock = new Lock($key, 'rng');
+        $fakeLock = new LockStub($key, 'rng');
         $mutex->acquire($key, ONE_FLOAT);
 
         $result = $this->await($mutex->release($fakeLock), $loop);
