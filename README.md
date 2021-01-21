@@ -1,41 +1,21 @@
-# Mutex locking for ReactPHP projects
+# Test Utilities for wyrihaximus/react-mutex
 
-![Continuous Integration](https://github.com/WyriHaximus/reactphp-mutex/workflows/Continuous%20Integration/badge.svg)
-[![Latest Stable Version](https://poser.pugx.org/WyriHaximus/react-mutex/v/stable.png)](https://packagist.org/packages/WyriHaximus/react-mutex)
-[![Total Downloads](https://poser.pugx.org/WyriHaximus/react-mutex/downloads.png)](https://packagist.org/packages/WyriHaximus/react-mutex)
-[![Code Coverage](https://scrutinizer-ci.com/g/WyriHaximus/reactphp-mutex/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/WyriHaximus/reactphp-mutex/?branch=master)
-[![License](https://poser.pugx.org/WyriHaximus/react-mutex/license.png)](https://packagist.org/packages/WyriHaximus/react-mutex)
+![Continuous Integration](https://github.com/WyriHaximus/reactphp-mutex-text-utilities/workflows/Continuous%20Integration/badge.svg)
+[![Latest Stable Version](https://poser.pugx.org/WyriHaximus/react-mutex-text-utilities/v/stable.png)](https://packagist.org/packages/WyriHaximus/react-mutex-text-utilities)
+[![Total Downloads](https://poser.pugx.org/WyriHaximus/react-mutex-text-utilities/downloads.png)](https://packagist.org/packages/WyriHaximus/react-mutex-text-utilities)
+[![License](https://poser.pugx.org/WyriHaximus/react-mutex-text-utilities/license.png)](https://packagist.org/packages/WyriHaximus/react-mutex-text-utilities)
 
 # Install
 
 To install via [Composer](http://getcomposer.org/), use the command below, it will automatically detect the latest version and bind it with `^`.
 
 ```
-composer require wyrihaximus/react-mutex
+composer require wyrihaximus/react-mutex-text-utilities
 ```
 
 # About
 
-This package provides two things:
-* An interface for [`mutex` locking](https://en.wikipedia.org/wiki/Mutual_exclusion)
-* A in-memory implementation of that interface
-
-# Usage
-
-```php
-$key = 'key'; // Unique key for this operation
-$mutex = new Memory();
-$mutex->acquire($key)->then(function ($lock) use ($mutex) {
-    if (!($lock instanceof Lock)) {
-        // We couldn't aquired the lock on this key
-        return;
-    }
-    
-    // We aquired the lock on this key
-    // Do long running non-blocking thing
-    $mutex->release($lock);
-});
-```
+See [`wyrihaximus/react-mutex`](https://github.com/WyriHaximus/reactphp-mutex) for full documentation.
 
 # License
 
