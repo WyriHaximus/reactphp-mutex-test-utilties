@@ -8,7 +8,7 @@
         "react/promise": "^2.7",
         "wyrihaximus/async-test-utilities": "^3.3",
         "wyrihaximus/constants": "^1.6",
-        "wyrihaximus/react-mutex-contracts": "dev-master",
+        "wyrihaximus/react-mutex-contracts": "^1.0",
         "wyrihaximus/ticking-promise": "^2.1"
     },
     "config": {
