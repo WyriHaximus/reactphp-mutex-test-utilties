@@ -9,7 +9,7 @@
         "wyrihaximus/async-test-utilities": "^3.3",
         "wyrihaximus/constants": "^1.6",
         "wyrihaximus/react-mutex-contracts": "^1.0",
-        "wyrihaximus/ticking-promise": "^2.1"
+        "wyrihaximus/ticking-promise": "^3.0"
     },
     "config": {
         "platform": {

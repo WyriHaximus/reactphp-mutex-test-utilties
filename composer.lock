@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3001b9dd976b7f0b87137e0ea1e6cbf0",
+    "content-hash": "e006b0114a872060619457fb527b959b",
     "packages": [
         {
             "name": "amphp/amp",
@@ -4634,23 +4634,23 @@
         },
         {
             "name": "react/event-loop",
-            "version": "v1.1.1",
+            "version": "v1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/reactphp/event-loop.git",
-                "reference": "6d24de090cd59cfc830263cfba965be77b563c13"
+                "reference": "be6dee480fc4692cec0504e65eb486e3be1aa6f2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/reactphp/event-loop/zipball/6d24de090cd59cfc830263cfba965be77b563c13",
-                "reference": "6d24de090cd59cfc830263cfba965be77b563c13",
+                "url": "https://api.github.com/repos/reactphp/event-loop/zipball/be6dee480fc4692cec0504e65eb486e3be1aa6f2",
+                "reference": "be6dee480fc4692cec0504e65eb486e3be1aa6f2",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
             },
             "require-dev": {
-                "phpunit/phpunit": "^7.0 || ^6.4 || ^5.7 || ^4.8.35"
+                "phpunit/phpunit": "^9.3 || ^5.7 || ^4.8.35"
             },
             "suggest": {
                 "ext-event": "~1.0 for ExtEventLoop",
@@ -4667,6 +4667,28 @@
             "license": [
                 "MIT"
             ],
+            "authors": [
+                {
+                    "name": "Christian Lück",
+                    "email": "christian@clue.engineering",
+                    "homepage": "https://clue.engineering/"
+                },
+                {
+                    "name": "Cees-Jan Kiewiet",
+                    "email": "reactphp@ceesjankiewiet.nl",
+                    "homepage": "https://wyrihaximus.net/"
+                },
+                {
+                    "name": "Jan Sorgalla",
+                    "email": "jsorgalla@gmail.com",
+                    "homepage": "https://sorgalla.com/"
+                },
+                {
+                    "name": "Chris Boden",
+                    "email": "cboden@gmail.com",
+                    "homepage": "https://cboden.dev/"
+                }
+            ],
             "description": "ReactPHP's core reactor event loop that libraries can use for evented I/O.",
             "keywords": [
                 "asynchronous",
@@ -4674,9 +4696,19 @@
             ],
             "support": {
                 "issues": "https://github.com/reactphp/event-loop/issues",
-                "source": "https://github.com/reactphp/event-loop/tree/v1.1.1"
+                "source": "https://github.com/reactphp/event-loop/tree/v1.2.0"
             },
-            "time": "2020-01-01T18:39:52+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/WyriHaximus",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/clue",
+                    "type": "github"
+                }
+            ],
+            "time": "2021-07-11T12:31:24+00:00"
         },
         {
             "name": "react/promise",
@@ -8370,25 +8402,25 @@
         },
         {
             "name": "wyrihaximus/ticking-promise",
-            "version": "2.1.0",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WyriHaximus/TickingPromise.git",
-                "reference": "d3903d4bebe8e3c5b11464c0bb81802cdeeb3751"
+                "reference": "460d01371f42681e627194ed6c8b9eb3bed82a7a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WyriHaximus/TickingPromise/zipball/d3903d4bebe8e3c5b11464c0bb81802cdeeb3751",
-                "reference": "d3903d4bebe8e3c5b11464c0bb81802cdeeb3751",
+                "url": "https://api.github.com/repos/WyriHaximus/TickingPromise/zipball/460d01371f42681e627194ed6c8b9eb3bed82a7a",
+                "reference": "460d01371f42681e627194ed6c8b9eb3bed82a7a",
                 "shasum": ""
             },
             "require": {
                 "php": "^8 || ^7.4",
-                "react/event-loop": "^1.0",
+                "react/event-loop": "^1.2",
                 "react/promise": "^2.8"
             },
             "require-dev": {
-                "wyrihaximus/async-test-utilities": "^3"
+                "wyrihaximus/async-test-utilities": "^3.4.24"
             },
             "type": "library",
             "autoload": {
@@ -8413,7 +8445,7 @@
             "description": "Wrapping ticks into a promise",
             "support": {
                 "issues": "https://github.com/WyriHaximus/TickingPromise/issues",
-                "source": "https://github.com/WyriHaximus/TickingPromise/tree/2.1.0"
+                "source": "https://github.com/WyriHaximus/TickingPromise/tree/3.0.0"
             },
             "funding": [
                 {
@@ -8421,7 +8453,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-11-25T12:43:21+00:00"
+            "time": "2021-07-25T16:43:36+00:00"
         }
     ],
     "packages-dev": [],
@@ -8437,5 +8469,5 @@
     "platform-overrides": {
         "php": "7.4.7"
     },
-    "plugin-api-version": "2.0.0"
+    "plugin-api-version": "2.1.0"
 }
