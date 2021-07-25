@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace WyriHaximus\React\Mutex;
 
-use React\EventLoop\Factory;
-use React\EventLoop\LoopInterface;
 use React\Promise\PromiseInterface;
 use WyriHaximus\AsyncTestUtilities\AsyncTestCase;
 use WyriHaximus\React\Mutex\Contracts\LockInterface;
@@ -24,7 +22,7 @@ use const WyriHaximus\Constants\Numeric\TWO_FLOAT;
 
 abstract class AbstractMutexTestCase extends AsyncTestCase
 {
-    abstract public function provideMutex(LoopInterface $loop): MutexInterface;
+    abstract public function provideMutex(): MutexInterface;
 
     /**
      * @test
@@ -33,17 +31,23 @@ abstract class AbstractMutexTestCase extends AsyncTestCase
     {
         $key = $this->generateKey();
 
-        $loop  = Factory::create();
-        $mutex = $this->provideMutex($loop);
+        $mutex = $this->provideMutex();
 
-        $firstLock         = '';
-        $secondLock        = '';
+        $firstLock  = '';
+        $secondLock = '';
+
+        /**
+         * @psalm-suppress TooManyTemplateParams
+         */
         $firstMutexPromise = $mutex->acquire($key, TWO_FLOAT);
         /** @phpstan-ignore-next-line */
         $firstMutexPromise->then(static function (?LockInterface $lock) use (&$firstLock): void {
             $firstLock = $lock;
         });
-        $secondtMutexPromise = timedPromise($loop, ONE)->then(
+        $secondtMutexPromise = timedPromise(ONE)->then(
+        /**
+         * @psalm-suppress TooManyTemplateParams
+         */
             static fn (): PromiseInterface => $mutex->acquire($key, TWO_FLOAT)
         );
         /** @phpstan-ignore-next-line */
@@ -51,7 +55,7 @@ abstract class AbstractMutexTestCase extends AsyncTestCase
             $secondLock = $lock;
         });
 
-        $this->await(all([$firstMutexPromise, $secondtMutexPromise]), $loop);
+        $this->await(all([$firstMutexPromise, $secondtMutexPromise]));
 
         self::assertInstanceOf(LockInterface::class, $firstLock);
         self::assertNull($secondLock);
@@ -64,13 +68,19 @@ abstract class AbstractMutexTestCase extends AsyncTestCase
     {
         $key = $this->generateKey();
 
-        $loop  = Factory::create();
-        $mutex = $this->provideMutex($loop);
+        $mutex = $this->provideMutex();
 
         $fakeLock = new LockStub($key, 'rng');
+
+        /**
+         * @psalm-suppress TooManyTemplateParams
+         */
         $mutex->acquire($key, ONE_FLOAT);
 
-        $result = $this->await($mutex->release($fakeLock), $loop);
+        /**
+         * @psalm-suppress TooManyTemplateParams
+         */
+        $result = $this->await($mutex->release($fakeLock));
         self::assertFalse($result);
     }
 
