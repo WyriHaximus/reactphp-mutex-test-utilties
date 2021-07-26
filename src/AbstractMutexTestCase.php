@@ -84,6 +84,80 @@ abstract class AbstractMutexTestCase extends AsyncTestCase
         self::assertFalse($result);
     }
 
+    /**
+     * @test
+     */
+    final public function spinWillWaiUntil(): void
+    {
+        $spinAcquireReleaseTime = null;
+        $lockReleaseTime        = null;
+
+        $key   = $this->generateKey();
+        $mutex = $this->provideMutex();
+
+        /**
+         * @psalm-suppress TooManyTemplateParams
+         */
+        $lock = $this->await($mutex->acquire($key, ONE_FLOAT * 100));
+
+        /**
+         * @psalm-suppress TooManyTemplateParams
+         */
+        $spinPromise = $mutex->spin($key, ONE_FLOAT, 13, 3)->then(static function (LockInterface $lock) use (&$spinAcquireReleaseTime): LockInterface {
+            $spinAcquireReleaseTime = time();
+
+            return $lock;
+        });
+
+        $releasePromise = timedPromise(0.1)->then(static function () use (&$lockReleaseTime, $mutex, $lock): PromiseInterface {
+            $lockReleaseTime = time();
+
+            /**
+             * @psalm-suppress TooManyTemplateParams
+             */
+            return $mutex->release($lock);
+        });
+
+        [$result, $spinLock] = $this->await(all([$releasePromise, $spinPromise]));
+
+        self::assertTrue($result);
+        self::assertSame($key, $spinLock->key());
+        self::assertNotNull($spinAcquireReleaseTime, 'Spin');
+        self::assertNotNull($lockReleaseTime, 'Aquire');
+        self::assertGreaterThan($lockReleaseTime, $spinAcquireReleaseTime);
+    }
+
+    /**
+     * @test
+     */
+    final public function spinDoesNotLock(): void
+    {
+        $key   = $this->generateKey();
+        $mutex = $this->provideMutex();
+
+        /**
+         * @psalm-suppress TooManyTemplateParams
+         */
+        $lock = $this->await($mutex->acquire($key, ONE_FLOAT * 100));
+
+        /**
+         * @psalm-suppress TooManyTemplateParams
+         */
+        $spinPromise = $mutex->spin($key, ONE_FLOAT, 3, 0.001);
+
+        $releasePromise = timedPromise(0.1)->then(static function () use ($mutex, $lock): PromiseInterface {
+            /**
+             * @psalm-suppress TooManyTemplateParams
+             */
+            return $mutex->release($lock);
+        });
+
+        [$result, $spinLock] = $this->await(all([$releasePromise, $spinPromise]));
+
+        self::assertTrue($result);
+        self::assertNull($spinLock);
+    }
+
     private function generateKey(): string
     {
         return 'key-' . time() . '-' . bin2hex(random_bytes(TWO));
