@@ -3,31 +3,42 @@
     "description": "Mutex locking test utilities for ReactPHP projects",
     "license": "MIT",
     "require": {
-        "php": "^7.4",
-        "react/event-loop": "^1.1",
-        "react/promise": "^2.7",
-        "wyrihaximus/async-test-utilities": "^4",
+        "php": "^8.2",
+        "ext-random": "^8.2",
+        "react/async": "^4.2",
+        "react/event-loop": "^1.5",
+        "react/promise": "^3.1",
+        "wyrihaximus/async-test-utilities": "^7.3",
         "wyrihaximus/constants": "^1.6",
-        "wyrihaximus/react-mutex-contracts": "^2",
-        "wyrihaximus/ticking-promise": "^3"
-    },
-    "config": {
-        "platform": {
-            "php": "7.4.7"
-        },
-        "sort-packages": true
+        "wyrihaximus/react-mutex-contracts": "^2.2",
+        "wyrihaximus/ticking-promise": "^3.1"
     },
     "autoload": {
         "psr-4": {
             "WyriHaximus\\React\\Mutex\\": "src/"
         }
     },
+    "config": {
+        "allow-plugins": {
+            "composer/package-versions-deprecated": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "ergebnis/composer-normalize": true,
+            "icanhazstring/composer-unused": true,
+            "infection/extension-installer": true
+        },
+        "platform": {
+            "php": "8.2.13"
+        },
+        "sort-packages": true
+    },
     "scripts": {
         "post-install-cmd": [
-            "composer normalize"
+            "composer normalize",
+            "composer update --lock --no-scripts"
         ],
         "post-update-cmd": [
-            "composer normalize"
+            "composer normalize",
+            "composer update --lock --no-scripts"
         ]
     }
 }

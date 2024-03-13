@@ -11,6 +11,7 @@ use WyriHaximus\React\Mutex\Contracts\MutexInterface;
 
 use function bin2hex;
 use function random_bytes;
+use function React\Async\await;
 use function React\Promise\all;
 use function time;
 use function WyriHaximus\React\timedPromise;
@@ -24,9 +25,7 @@ abstract class AbstractMutexTestCase extends AsyncTestCase
 {
     abstract public function provideMutex(): MutexInterface;
 
-    /**
-     * @test
-     */
+    /** @test */
     final public function thatYouCantRequiredTheSameLockTwice(): void
     {
         $key = $this->generateKey();
@@ -36,34 +35,26 @@ abstract class AbstractMutexTestCase extends AsyncTestCase
         $firstLock  = '';
         $secondLock = '';
 
-        /**
-         * @psalm-suppress TooManyTemplateParams
-         */
         $firstMutexPromise = $mutex->acquire($key, TWO_FLOAT);
         /** @phpstan-ignore-next-line */
-        $firstMutexPromise->then(static function (?LockInterface $lock) use (&$firstLock): void {
+        $firstMutexPromise->then(static function (LockInterface|null $lock) use (&$firstLock): void {
             $firstLock = $lock;
         });
         $secondtMutexPromise = timedPromise(ONE)->then(
-        /**
-         * @psalm-suppress TooManyTemplateParams
-         */
-            static fn (): PromiseInterface => $mutex->acquire($key, TWO_FLOAT)
+            static fn (): PromiseInterface => $mutex->acquire($key, TWO_FLOAT),
         );
         /** @phpstan-ignore-next-line */
-        $secondtMutexPromise->then(static function (?LockInterface $lock) use (&$secondLock): void {
+        $secondtMutexPromise->then(static function (LockInterface|null $lock) use (&$secondLock): void {
             $secondLock = $lock;
         });
 
-        $this->await(all([$firstMutexPromise, $secondtMutexPromise]));
+        await(all([$firstMutexPromise, $secondtMutexPromise]));
 
         self::assertInstanceOf(LockInterface::class, $firstLock);
         self::assertNull($secondLock);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     final public function cannotReleaseLockWithWrongRng(): void
     {
         $key = $this->generateKey();
@@ -72,21 +63,13 @@ abstract class AbstractMutexTestCase extends AsyncTestCase
 
         $fakeLock = new LockStub($key, 'rng');
 
-        /**
-         * @psalm-suppress TooManyTemplateParams
-         */
         $mutex->acquire($key, ONE_FLOAT);
 
-        /**
-         * @psalm-suppress TooManyTemplateParams
-         */
-        $result = $this->await($mutex->release($fakeLock));
+        $result = await($mutex->release($fakeLock));
         self::assertFalse($result);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     final public function spinWillWaiUntil(): void
     {
         $spinAcquireReleaseTime = null;
@@ -95,14 +78,10 @@ abstract class AbstractMutexTestCase extends AsyncTestCase
         $key   = $this->generateKey();
         $mutex = $this->provideMutex();
 
-        /**
-         * @psalm-suppress TooManyTemplateParams
-         */
-        $lock = $this->await($mutex->acquire($key, ONE_FLOAT * 100));
+        $lock = await($mutex->acquire($key, ONE_FLOAT * 100));
+        self::assertInstanceOf(LockInterface::class, $lock);
 
-        /**
-         * @psalm-suppress TooManyTemplateParams
-         */
+        /** @phpstan-ignore-next-line */
         $spinPromise = $mutex->spin($key, ONE_FLOAT, 13, 3)->then(static function (LockInterface $lock) use (&$spinAcquireReleaseTime): LockInterface {
             $spinAcquireReleaseTime = time();
 
@@ -112,47 +91,36 @@ abstract class AbstractMutexTestCase extends AsyncTestCase
         $releasePromise = timedPromise(0.1)->then(static function () use (&$lockReleaseTime, $mutex, $lock): PromiseInterface {
             $lockReleaseTime = time();
 
-            /**
-             * @psalm-suppress TooManyTemplateParams
-             */
             return $mutex->release($lock);
         });
 
-        [$result, $spinLock] = $this->await(all([$releasePromise, $spinPromise]));
+        $result   = await($releasePromise);
+        $spinLock = await($spinPromise);
 
         self::assertTrue($result);
+        /** @psalm-suppress PossiblyNullReference */
         self::assertSame($key, $spinLock->key());
         self::assertNotNull($spinAcquireReleaseTime, 'Spin');
         self::assertNotNull($lockReleaseTime, 'Aquire');
         self::assertGreaterThan($lockReleaseTime, $spinAcquireReleaseTime);
     }
 
-    /**
-     * @test
-     */
+    /** @test */
     final public function spinDoesNotLock(): void
     {
         $key   = $this->generateKey();
         $mutex = $this->provideMutex();
 
-        /**
-         * @psalm-suppress TooManyTemplateParams
-         */
-        $lock = $this->await($mutex->acquire($key, ONE_FLOAT * 100));
+        $lock = await($mutex->acquire($key, ONE_FLOAT * 100));
+        self::assertInstanceOf(LockInterface::class, $lock);
 
-        /**
-         * @psalm-suppress TooManyTemplateParams
-         */
         $spinPromise = $mutex->spin($key, ONE_FLOAT, 3, 0.001);
 
         $releasePromise = timedPromise(0.1)->then(static function () use ($mutex, $lock): PromiseInterface {
-            /**
-             * @psalm-suppress TooManyTemplateParams
-             */
             return $mutex->release($lock);
         });
 
-        [$result, $spinLock] = $this->await(all([$releasePromise, $spinPromise]));
+        [$result, $spinLock] = await(all([$releasePromise, $spinPromise]));
 
         self::assertTrue($result);
         self::assertNull($spinLock);
