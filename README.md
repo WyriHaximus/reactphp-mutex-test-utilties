@@ -1,9 +1,9 @@
 # Test Utilities for wyrihaximus/react-mutex
 
-![Continuous Integration](https://github.com/WyriHaximus/reactphp-mutex-text-utilities/workflows/Continuous%20Integration/badge.svg)
-[![Latest Stable Version](https://poser.pugx.org/WyriHaximus/react-mutex-text-utilities/v/stable.png)](https://packagist.org/packages/WyriHaximus/react-mutex-text-utilities)
-[![Total Downloads](https://poser.pugx.org/WyriHaximus/react-mutex-text-utilities/downloads.png)](https://packagist.org/packages/WyriHaximus/react-mutex-text-utilities)
-[![License](https://poser.pugx.org/WyriHaximus/react-mutex-text-utilities/license.png)](https://packagist.org/packages/WyriHaximus/react-mutex-text-utilities)
+[![Continuous Integration](https://github.com/WyriHaximus/reactphp-mutex-test-utilities/actions/workflows/ci.yml/badge.svg)](https://github.com/WyriHaximus/reactphp-mutex-test-utilities/actions/workflows/ci.yml)
+[![Latest Stable Version](https://poser.pugx.org/wyrihaximus/react-mutex-test-utilities/v/stable.png)](https://packagist.org/packages/wyrihaximus/react-mutex-test-utilities)
+[![Total Downloads](https://poser.pugx.org/wyrihaximus/react-mutex-test-utilities/downloads.png)](https://packagist.org/packages/wyrihaximus/react-mutex-test-utilities)
+[![License](https://poser.pugx.org/wyrihaximus/react-mutex-test-utilities/license.png)](https://packagist.org/packages/wyrihaximus/react-mutex-test-utilities)
 
 # Install
 
