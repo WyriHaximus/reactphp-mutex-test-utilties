@@ -14,4 +14,4 @@ permissions:
 jobs:
   ci:
     name: Continuous Integration
-    uses: WyriHaximus/github-workflows/.github/workflows/package.yaml@only-run-directly-on-OSes-if-unit-testing-raw-exists
+    uses: WyriHaximus/github-workflows/.github/workflows/package.yaml@main
